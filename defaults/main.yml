@@ -167,7 +167,7 @@ etherpad_floc_optout_enabled: true
 etherpad_hsts_preload_enabled: false
 
 # Controls whether putting Etherpad in a frame on another website will be allowed.
-etherpad_framing_enabled: false
+etherpad_framing_enabled: true
 
 # Database-related configuration fields.
 #
