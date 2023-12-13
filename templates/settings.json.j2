@@ -22,7 +22,6 @@
   "maxAge": 21600,
   "abiword": {{ etherpad_abiword|to_json }},
   "soffice": {{ etherpad_soffice|to_json }},
-  "tidyHtml": null,
   "allowUnknownFileEnds": true,
   "requireAuthentication": false,
   "requireAuthorization": false,
@@ -104,13 +103,6 @@
     "pageDown": true
   },
   "loglevel": "WARN",
-  "logconfig" :
-    { "appenders": [
-        { "type": "console",
-          "layout": {"type": "messagePassThrough"}
-        }
-      ]
-    },
   "customLocaleStrings": {},
   "enableAdminUITests": false
 }
