@@ -37,7 +37,6 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
 			node --experimental-worker src/node/server.js \
 				--settings /config/settings.json \
 				--credentials /data/credentials.json \
-				--sessionkey /data/sessionkey.json \
 				--apikey /data/apikey.json
 
 {% for network in etherpad_container_additional_networks %}
