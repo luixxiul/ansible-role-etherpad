@@ -34,7 +34,7 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
 			{{ arg }} \
 			{% endfor %}
 			{{ etherpad_container_image }} \
-			node --experimental-worker src/node/server.js \
+			pnpm run prod \
 				--settings /config/settings.json \
 				--credentials /data/credentials.json \
 				--apikey /data/apikey.json
