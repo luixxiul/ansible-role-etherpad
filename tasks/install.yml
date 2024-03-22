@@ -64,16 +64,20 @@
         force: "yes"
       register: etherpad_git_pull_results
 
+    # Invoking the `docker build` command here, instead of calling the `docker_image` Ansible module,
+    # because the latter does not support BuildKit.
+    # See: https://github.com/ansible-collections/community.general/issues/514
     - name: Ensure Etherpad container image is built
-      community.docker.docker_image:
-        name: "{{ etherpad_container_image }}"
-        source: build
-        force_source: "{{ etherpad_git_pull_results.changed if ansible_version.major > 2 or ansible_version.minor >= 8 else omit }}"
-        force: "{{ omit if ansible_version.major > 2 or ansible_version.minor >= 8 else etherpad_git_pull_results.changed }}"
-        build:
-          dockerfile: Dockerfile
-          path: "{{ etherpad_container_src_path }}"
-          pull: true
+      ansible.builtin.shell:
+        chdir: "{{ etherpad_container_src_path }}"
+        cmd: |
+          {{ devture_systemd_docker_base_host_command_docker }} build \
+          -t "{{ etherpad_container_image }}" \
+          -f Dockerfile \
+          .
+      environment:
+        DOCKER_BUILDKIT: 1
+      changed_when: true
 
 - name: Ensure Etherpad container network is created
   community.general.docker_network:
