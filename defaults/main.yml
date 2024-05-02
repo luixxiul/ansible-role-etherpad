@@ -6,7 +6,7 @@ etherpad_enabled: true
 
 etherpad_identifier: etherpad
 
-etherpad_version: 2.0.1
+etherpad_version: 2.0.3
 
 etherpad_scheme: https
 
