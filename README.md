@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2023 Slavi Pantaleev
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 # Etherpad Ansible role
 
 This is an [Ansible](https://www.ansible.com/) role which installs [Etherpad](https://etherpad.org) to run as a [Docker](https://www.docker.com/) container wrapped in a systemd service.
