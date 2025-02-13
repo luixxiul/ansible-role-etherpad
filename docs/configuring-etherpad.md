@@ -12,55 +12,90 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 # Setting up Etherpad
 
-This is an [Ansible](https://www.ansible.com/) role which installs [Etherpad](https://etherpad.org) to run as a [Docker](https://www.docker.com/) container wrapped in a systemd service.
-
-Etherpad is an open source collaborative text editor. It can not only be integrated with Element clients ([Element Web](configuring-playbook-client-element-web.md)/Desktop, Android and iOS) as a widget, but also be used as standalone web app.
-
-## Adjusting DNS records
-
-By default, this playbook installs Etherpad on the `etherpad.` subdomain (`etherpad.example.com`) and requires you to create a CNAME record for `etherpad`, which targets `matrix.example.com`.
-
-When setting, replace `example.com` with your own.
+This is an [Ansible](https://www.ansible.com/) role which installs [Etherpad](https://etherpad.org), an open source collaborative text editor, to run as a [Docker](https://www.docker.com/) container wrapped in a systemd service.
 
 ## Adjusting the playbook configuration
 
-To enable Etherpad, add the following configuration to your `inventory/host_vars/matrix.example.com/vars.yml` file:
+To enable Etherpad with this role, add the following configuration to your `vars.yml` file.
+
+**Note**: the path should be something like `inventory/host_vars/matrix.example.com/vars.yml` if you use the [MDAD (matrix-docker-ansible-deploy)](https://github.com/spantaleev/matrix-docker-ansible-deploy) Ansible playbook.
 
 ```yaml
 etherpad_enabled: true
-
-# Uncomment and adjust this part if you'd like to enable the admin web UI
-# etherpad_admin_username: YOUR_USERNAME_HERE
-# etherpad_admin_password: YOUR_PASSWORD_HERE
 ```
 
-### Adjusting the Etherpad URL (optional)
+### Set the hostname
 
-By tweaking the `etherpad_hostname` and `etherpad_path_prefix` variables, you can easily make the service available at a **different hostname and/or path** than the default one.
+**Note**: if you use the MDAD Ansible playbook, it installs Etherpad on the `etherpad.` subdomain (`etherpad.example.com`) by default, so this setting is optional.
 
-Example additional configuration for your `vars.yml` file:
+To serve Etherpad you need to set the hostname as well. To do so, add the following configuration to your `vars.yml` file. Make sure to replace `example.com` with your own value.
 
 ```yaml
-# Switch to the domain used for Matrix services (`matrix.example.com`),
-# so we won't need to add additional DNS records for Etherpad.
-etherpad_hostname: "{{ matrix_server_fqn_matrix }}"
+# Uncomment and adjust this part if you'd like to use a different scheme than the default
+# etherpad_scheme: https
 
-# Expose under the /etherpad subpath
-etherpad_path_prefix: /etherpad
+etherpad_hostname: "example.com"
 ```
 
-After changing the domain, **you may need to adjust your DNS** records to point the Etherpad domain to the Matrix server.
+After adjusting the hostname, make sure to adjust your DNS records to point the Etherpad domain to your server.
 
-If you've decided to reuse the `matrix.` domain, you won't need to do any extra DNS configuration.
+### Set the username and password of database
 
-### Configure the default text (optional)
+**Note**: if you use the MDAD Ansible playbook, these settings are not needed as they are specified by default. See its [`group_vars`](https://github.com/spantaleev/matrix-docker-ansible-deploy/blob/master/group_vars/matrix_servers) for details.
 
-You can also edit the default text on a new pad with the variable `etherpad_default_pad_text`.
+Add the following configuration to your `vars.yml` file for the database, which Etherpad is going to use.
 
-To do so, add the following configuration to your `vars.yml` file (adapt to your needs):
+Make sure to replace `YOUR_DATABASE_USERNAME_HERE` and `YOUR_DATABASE_PASSWORD_HERE` with your own values. **Do not use the default password**, which is set to `some-password` on the `main.yml` file.
 
 ```yaml
-# Note: the whole text (all of its belonging lines) under the variable needs to be indented with 2 spaces.
+etherpad_database_username: YOUR_DATABASE_USERNAME_HERE
+etherpad_database_password: YOUR_DATABASE_PASSWORD_HERE
+```
+
+### Enable admin web UI (optional)
+
+To enable the admin web UI, add the following configuration to your `vars.yml` file. Make sure to replace `YOUR_USERNAME_HERE` and `YOUR_PASSWORD_HERE` with your own values.
+
+```yaml
+etherpad_admin_username: YOUR_USERNAME_HERE
+etherpad_admin_password: YOUR_PASSWORD_HERE
+```
+
+### Enable HSTS preloading (optional)
+
+If you want to enable [HSTS (HTTP Strict-Transport-Security) preloading](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security#preloading_strict_transport_security), add the following configuration to your `vars.yml` file:
+
+```yaml
+etherpad_hsts_preload_enabled: true
+```
+
+### Allow/disallow embedding Etherpad (optional)
+
+It is possible to control whether embedding Etherpad to a frame on another website will be allowed or not.
+
+By default it is allowed, and you can disallow it by adding the following configuration to your `vars.yml` file:
+
+```yaml
+etherpad_framing_enabled: false
+```
+
+Setting `false` to the variable disallows Etherpad to be embedded on a website with a different origin by specifying `SAMEORIGIN` to the "X-Frame-Options" response header and `frame-ancestors 'self'` to the Content-Security-Policy (CSP) header, respectively.
+
+### Set the name of the instance (optional)
+
+The name of the instance is set to "Etherpad" by default. To change it, add the following configuration to your `vars.yml` file (adapt to your needs):
+
+```yaml
+etherpad_title: YOUR_INSTANCE_NAME_HERE
+```
+
+### Set the default text (optional)
+
+You can also edit the default text on a new pad with the variable `etherpad_default_pad_text`. To do so, add the following configuration to your `vars.yml` file (adapt to your needs).
+
+**Note**: the whole text (all of its belonging lines) under the variable needs to be indented with 2 spaces.
+
+```yaml
 etherpad_default_pad_text: |
   Welcome to Etherpad!
 
@@ -75,32 +110,23 @@ There are some additional things you may wish to configure about the component.
 
 Take a look at:
 
-- [etherpad role](https://github.com/mother-of-all-self-hosting/ansible-role-etherpad)'s [`defaults/main.yml`](https://github.com/mother-of-all-self-hosting/ansible-role-etherpad/blob/main/defaults/main.yml) for some variables that you can customize via your `vars.yml` file. You can override settings (even those that don't have dedicated playbook variables) using the `etherpad_configuration_extension_json` variable
+- [`defaults/main.yml`](../defaults/main.yml) for some variables that you can customize via your `vars.yml` file. You can override settings (even those that don't have dedicated playbook variables) using the `etherpad_configuration_extension_json` variable
 
 ## Installing
 
-After configuring the playbook and potentially [adjusting your DNS records](#adjusting-dns-records), run the playbook with [playbook tags](playbook-tags.md) as below:
+After configuring the playbook, run the installation command of your playbook as below:
 
-<!-- NOTE: let this conservative command run (instead of install-all) to make it clear that failure of the command means something is clearly broken. -->
 ```sh
-ansible-playbook -i inventory/hosts setup.yml --tags=setup-all,ensure-matrix-users-created,start
+ansible-playbook -i inventory/hosts setup.yml --tags=setup-all,start
 ```
 
-**Notes**:
-
-- The `ensure-matrix-users-created` playbook tag makes the playbook automatically create the Etherpad admin user (`etherpad_admin_username`).
-
-- The shortcut commands with the [`just` program](just.md) are also available: `just install-all` or `just setup-all`
-
-  `just install-all` is useful for maintaining your setup quickly ([2x-5x faster](../CHANGELOG.md#2x-5x-performance-improvements-in-playbook-runtime) than `just setup-all`) when its components remain unchanged. If you adjust your `vars.yml` to remove other components, you'd need to run `just setup-all`, or these components will still remain installed.
-
-- If you change the Etherpad admin user's password (`etherpad_admin_password` in your `vars.yml` file) subsequently, the admin user's credentials on the homeserver won't be updated automatically. If you'd like to change the admin user's password, use a tool like [synapse-admin](configuring-playbook-synapse-admin.md) to change it, and then update `etherpad_admin_password` to let the admin user know its new password.
+If you use the [mash-playbook](https://github.com/mother-of-all-self-hosting/mash-playbook) or MDAD Ansible playbook, the shortcut commands with the [`just` program](https://github.com/spantaleev/matrix-docker-ansible-deploy/blob/master/docs/just.md) are also available: `just install-all` or `just setup-all`
 
 ## Usage
 
-The Etherpad UI should be available at `https://etherpad.example.com`, while the admin UI (if enabled) should then be available at `https://etherpad.example.com/admin`.
+The Etherpad UI should be available at the specified hostname like `https://example.com`, while the admin UI (if enabled) should then be available at `https://example.com/admin`.
 
-If you've [decided on another hostname or path-prefix](#adjusting-the-etherpad-url-optional) (e.g. `https://matrix.example.com/etherpad`), adjust these URLs accordingly before using it.
+Check [the official wiki](https://github.com/ether/etherpad-lite/wiki) for details about how to configure and use Etherpad.
 
 ### Managing / Deleting old pads
 
@@ -110,15 +136,15 @@ After logging in to the admin web UI, go to the plugin manager page, and install
 
 Once the plugin is installed, you should have a "Manage pads" section in the UI.
 
-### Integrating a Etherpad widget in a room
+### Change admin user's password
 
-**Note**: this is how it works in Element Web. It might work quite similar with other clients:
+Even if you change the Etherpad admin user's password (`etherpad_admin_password` in your `vars.yml` file) subsequently, the admin user's credentials on the homeserver won't be updated automatically.
 
-To integrate a standalone Etherpad in a room, create your pad by visiting `https://etherpad.example.com`. When the pad opens, copy the URL and send a command like this to the room: `/addwidget URL`. You will then find your integrated Etherpad within the right sidebar in the `Widgets` section.
+If you'd like to change the admin user's password, use a tool to change it before updating `etherpad_admin_password` to let the admin user know its new password. For MDAD project, you can use [synapse-admin](https://github.com/spantaleev/matrix-docker-ansible-deploy/blob/master/docs/configuring-playbook-synapse-admin.md) to change the password.
 
 ## Troubleshooting
 
-As with all other services, you can find the logs in [systemd-journald](https://www.freedesktop.org/software/systemd/man/systemd-journald.service.html) by logging in to the server with SSH and running `journalctl -fu matrix-etherpad`.
+As with all other services, you can find the logs in [systemd-journald](https://www.freedesktop.org/software/systemd/man/systemd-journald.service.html) by logging in to the server with SSH and running `journalctl -fu etherpad` (or how you/your playbook named the service, e.g. `matrix-etherpad`).
 
 ### Increase logging verbosity
 
