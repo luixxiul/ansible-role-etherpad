@@ -21,7 +21,19 @@ To enable Etherpad with this role, add the following configuration to your `vars
 **Note**: the path should be something like `inventory/host_vars/matrix.example.com/vars.yml` if you use the [MDAD (matrix-docker-ansible-deploy)](https://github.com/spantaleev/matrix-docker-ansible-deploy) Ansible playbook.
 
 ```yaml
+########################################################################
+#                                                                      #
+# etherpad                                                             #
+#                                                                      #
+########################################################################
+
 etherpad_enabled: true
+
+########################################################################
+#                                                                      #
+# etherpad                                                             #
+#                                                                      #
+########################################################################
 ```
 
 ### Set the hostname
