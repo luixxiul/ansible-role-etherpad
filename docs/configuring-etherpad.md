@@ -138,7 +138,7 @@ If you use the [mash-playbook](https://github.com/mother-of-all-self-hosting/mas
 
 The Etherpad UI should be available at the specified hostname like `https://example.com`, while the admin UI (if enabled) should then be available at `https://example.com/admin`.
 
-Check [the official wiki](https://github.com/ether/etherpad-lite/wiki) for details about how to configure and use Etherpad.
+Check [the official docs](https://etherpad.org/doc/latest/) and [the wiki at GitHub](https://github.com/ether/etherpad-lite/wiki) for details about how to configure and use Etherpad.
 
 ### Managing / Deleting old pads
 
