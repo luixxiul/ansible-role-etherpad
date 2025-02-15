@@ -140,9 +140,19 @@ etherpad_configuration_extension_json: |
    "commitRateLimiting": {
      "duration": 1,
      "points": 10
+   },
+   "padOptions": {
+     "noColors": true,
+     "showChat": true,
+     "showLineNumbers": false,
+     "rtl": true,
+     "alwaysShowChat": true,
+     "lang": "ar"
    }
   }
 ```
+
+Check [the official docs](https://etherpad.org/doc/latest/) for available settings.
 
 ## Installing
 
