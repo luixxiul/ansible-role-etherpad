@@ -64,16 +64,16 @@ etherpad_database_username: YOUR_DATABASE_USERNAME_HERE
 etherpad_database_password: YOUR_DATABASE_PASSWORD_HERE
 ```
 
-### Enable admin user (optional)
+### Create admin user (optional)
 
-You can enable an admin user account for authentication. The admin user account is used by:
+You can create an admin user account for authentication. The admin user account is used by:
   - default HTTP basic authentication if no plugin handles authentication
   - authentication plugins
   - authorization plugins
 
-The admin user can access to `/admin` page. Authentication and authorization plugins may define additional properties.
+The admin user can access to `/admin` page. Authentication and authorization plugins may define additional properties. Note that `/admin` page will not be available, if the admin user is not created.
 
-To enable the admin user, add the following configuration to your `vars.yml` file. Make sure to replace `YOUR_USERNAME_HERE` and `YOUR_PASSWORD_HERE` with your own values.
+To create the admin user, add the following configuration to your `vars.yml` file. Make sure to replace `YOUR_USERNAME_HERE` and `YOUR_PASSWORD_HERE` with your own values.
 
 ```yaml
 etherpad_admin_username: YOUR_USERNAME_HERE
