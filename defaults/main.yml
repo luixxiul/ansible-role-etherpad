@@ -36,7 +36,10 @@ etherpad_systemd_required_services_list_auto: []
 etherpad_systemd_required_services_list_custom: []
 
 # List of systemd services that Etherpad systemd service wants
-etherpad_systemd_wanted_services_list: []
+etherpad_systemd_wanted_services_list: "{{ etherpad_systemd_wanted_services_list_default + etherpad_systemd_wanted_services_list_auto + etherpad_systemd_wanted_services_list_custom }}"
+etherpad_systemd_wanted_services_list_default: []
+etherpad_systemd_wanted_services_list_auto: []
+etherpad_systemd_wanted_services_list_custom: []
 
 # Container user has to be able to write to the source file directories until this bug is fixed:
 # https://github.com/ether/etherpad-lite/issues/2683
