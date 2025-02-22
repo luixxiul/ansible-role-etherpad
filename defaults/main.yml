@@ -67,7 +67,9 @@ etherpad_container_network: "{{ etherpad_identifier }}"
 # A list of additional container networks that the container would be connected to.
 # The role does not create these networks, so make sure they already exist.
 # Use this to expose this container to another reverse proxy, which runs in a different container network.
-etherpad_container_additional_networks: []
+etherpad_container_additional_networks: "{{ etherpad_container_additional_networks_auto + etherpad_container_additional_networks_custom }}"
+etherpad_container_additional_networks_auto: []
+etherpad_container_additional_networks_custom: []
 
 # etherpad_container_labels_traefik_enabled controls whether labels to assist a Traefik reverse-proxy will be attached to the container.
 # See `../templates/labels.j2` for details.
