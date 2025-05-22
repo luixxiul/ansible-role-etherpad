@@ -3,14 +3,18 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
 
-- block:
-    - when: etherpad_enabled | bool
+- name: Perform Etherpad installation tasks
+  block:
+    - name: Validate Etherpad configuration
+      when: etherpad_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/validate_config.yml"
 
-    - when: etherpad_enabled | bool
+    - name: Install Etherpad
+      when: etherpad_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/install.yml"
 
-    - when: etherpad_enabled | bool
+    - name: Migrate old Etherpad settings.json file
+      when: etherpad_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/migrate.yml"
   tags:
     - setup-all
@@ -18,8 +22,10 @@
     - install-all
     - install-etherpad
 
-- block:
-    - when: not etherpad_enabled | bool
+- name: Perform Etherpad uninstallation tasks
+  block:
+    - name: Uninstall Etherpad
+      when: not etherpad_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/uninstall.yml"
   tags:
     - setup-all
