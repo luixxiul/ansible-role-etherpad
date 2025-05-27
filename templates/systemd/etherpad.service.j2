@@ -5,7 +5,6 @@ SPDX-FileCopyrightText: 2024 Nikita Chernyi
 SPDX-License-Identifier: AGPL-3.0-or-later
 #}
 
-#jinja2: lstrip_blocks: "True"
 [Unit]
 Description=Etherpad ({{ etherpad_identifier }})
 {% for service in etherpad_systemd_required_services_list %}
@@ -31,7 +30,7 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
 			--cap-drop=ALL \
 			--network={{ etherpad_container_network }} \
 			{% if etherpad_container_http_host_bind_port %}
-			-p {{ etherpad_container_http_host_bind_port }}:9001 \
+			-p {{ etherpad_container_http_host_bind_port }}:{{ etherpad_container_http_port }} \
 			{% endif %}
 			--label-file={{ etherpad_base_path }}/labels \
 			--health-interval={{ etherpad_container_health_interval }} \

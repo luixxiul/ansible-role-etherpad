@@ -4,7 +4,7 @@
 
 ---
 
-- name: Ensure Etherpad paths exists
+- name: Ensure Etherpad paths exist
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
@@ -30,7 +30,7 @@
       group: root
       when: "{{ etherpad_container_image_self_build }}"
 
-- name: Ensure Etherpad config installed
+- name: Ensure Etherpad configuration file installed
   ansible.builtin.copy:
     content: "{{ etherpad_configuration | to_nice_json }}"
     dest: "{{ etherpad_config_path }}/settings.json"
@@ -91,7 +91,7 @@
     driver: bridge
     driver_options: "{{ devture_systemd_docker_base_container_networks_driver_options }}"
 
-- name: Ensure Etherpad systemd service installed
+- name: Ensure Etherpad systemd service is present
   ansible.builtin.template:
     src: "{{ role_path }}/templates/systemd/etherpad.service.j2"
     dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ etherpad_identifier }}.service"
