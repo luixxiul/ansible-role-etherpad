@@ -3,12 +3,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
-
 - name: Ensure Etherpad paths exist
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
-    mode: 0770
+    mode: "0770"
     owner: "{{ item.owner }}"
     group: "{{ item.group }}"
   when: item.when | bool
@@ -34,7 +33,7 @@
   ansible.builtin.copy:
     content: "{{ etherpad_configuration | to_nice_json }}"
     dest: "{{ etherpad_config_path }}/settings.json"
-    mode: 0640
+    mode: "0640"
     owner: "{{ etherpad_user_uid }}"
     group: "{{ etherpad_user_gid }}"
 
@@ -42,7 +41,7 @@
   ansible.builtin.template:
     src: "{{ role_path }}/templates/labels.j2"
     dest: "{{ etherpad_base_path }}/labels"
-    mode: 0640
+    mode: "0640"
     owner: "{{ etherpad_user_uid }}"
     group: "{{ etherpad_user_gid }}"
 
@@ -58,7 +57,8 @@
   delay: "{{ devture_playbook_help_container_retries_delay }}"
   until: result is not failed
 
-- when: etherpad_container_image_self_build | bool
+- name: Run if Etherpad container image is built | bool
+  when: etherpad_container_image_self_build | bool
   block:
     - name: Ensure Etherpad repository is present on self-build
       ansible.builtin.git:
@@ -80,7 +80,7 @@
           -f Dockerfile \
           .
       environment:
-        DOCKER_BUILDKIT: 1
+        DOCKER_BUILDKIT: "1"
       changed_when: true
 
 - name: Ensure Etherpad container network is created
@@ -94,4 +94,4 @@
   ansible.builtin.template:
     src: "{{ role_path }}/templates/systemd/etherpad.service.j2"
     dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ etherpad_identifier }}.service"
-    mode: 0644
+    mode: "0644"

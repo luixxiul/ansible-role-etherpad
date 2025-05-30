@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
-
 - name: (Deprecation) Catch and report renamed settings
   ansible.builtin.fail:
     msg: >-
@@ -11,7 +10,7 @@
       Please change your configuration to rename the variable (`{{ item.old }}` -> `{{ item.new }}`).
   when: "item.old in vars"
   with_items:
-    - {'old': 'etherpad_container_image_name_prefix', 'new': 'etherpad_container_image_registry_prefix'}
+    - { "old": "etherpad_container_image_name_prefix", "new": "etherpad_container_image_registry_prefix" }
 
 - name: Fail if required Etherpad settings not defined
   ansible.builtin.fail:
@@ -24,7 +23,8 @@
     - etherpad_database_hostname
     - etherpad_container_network
 
-- when: etherpad_container_labels_traefik_enabled | bool
+- name: Run if Traefik is enabled
+  when: etherpad_container_labels_traefik_enabled | bool
   block:
     - name: Fail if required ntfy Traefik settings not defined
       ansible.builtin.fail:

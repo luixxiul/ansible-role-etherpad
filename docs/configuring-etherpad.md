@@ -67,9 +67,10 @@ etherpad_database_password: YOUR_DATABASE_PASSWORD_HERE
 ### Create admin user (optional)
 
 You can create an admin user account for authentication. The admin user account is used by:
-  - default HTTP basic authentication if no plugin handles authentication
-  - authentication plugins
-  - authorization plugins
+
+- default HTTP basic authentication if no plugin handles authentication
+- authentication plugins
+- authorization plugins
 
 The admin user can access to `/admin` page. Authentication and authorization plugins may define additional properties. Note that `/admin` page will not be available, if the admin user is not created.
 
@@ -172,7 +173,7 @@ Check [the official docs](https://etherpad.org/doc/latest/) and [the wiki at Git
 
 ### Install plugins
 
-If you have created an admin user, it is possible to install plugins at the admin interface available at https://example.com/admin/plugins after logging in to the admin user account.
+If you have created an admin user, it is possible to install plugins at the admin interface available at `https://example.com/admin/plugins` after logging in to the admin user account.
 
 The list of the plugins hosted on npm is available at the [Plugins website](https://static.etherpad.org).
 
