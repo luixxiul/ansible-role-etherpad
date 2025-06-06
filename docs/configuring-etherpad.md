@@ -68,7 +68,7 @@ etherpad_database_password: YOUR_DATABASE_PASSWORD_HERE
 
 You can create an admin user account for authentication. The admin user account is used by:
 
-- default HTTP basic authentication if no plugin handles authentication
+- default HTTP Basic authentication if no plugin handles authentication
 - authentication plugins
 - authorization plugins
 
