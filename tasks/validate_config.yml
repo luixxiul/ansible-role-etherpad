@@ -11,6 +11,7 @@
   when: "item.old in vars"
   with_items:
     - { "old": "etherpad_container_image_name_prefix", "new": "etherpad_container_image_registry_prefix" }
+    - { "old": "etherpad_container_src_path", "new": "etherpad_container_image_self_build_src_files_path" }
 
 - name: Fail if required Etherpad settings not defined
   ansible.builtin.fail:

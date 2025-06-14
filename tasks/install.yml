@@ -25,7 +25,7 @@
       owner: "{{ etherpad_user_uid }}"
       group: "{{ etherpad_user_gid }}"
       when: true
-    - path: "{{ etherpad_container_src_path }}"
+    - path: "{{ etherpad_container_image_self_build_src_files_path }}"
       owner: root
       group: root
       when: "{{ etherpad_container_image_self_build }}"
@@ -78,7 +78,7 @@
       ansible.builtin.git:
         repo: "{{ etherpad_container_image_self_build_repo }}"
         version: "{{ etherpad_container_image_self_build_repo_version }}"
-        dest: "{{ etherpad_container_src_path }}"
+        dest: "{{ etherpad_container_image_self_build_src_files_path }}"
         force: "yes"
       register: etherpad_git_pull_results
 
@@ -87,10 +87,10 @@
     # See: https://github.com/ansible-collections/community.general/issues/514
     - name: Ensure Etherpad container image is built
       ansible.builtin.shell:
-        chdir: "{{ etherpad_container_src_path }}"
+        chdir: "{{ etherpad_container_image_self_build_src_files_path }}"
         cmd: |
           {{ devture_systemd_docker_base_host_command_docker }} build \
-          -t "{{ etherpad_container_image }}" \
+          -t "{{ etherpad_container_image_self_build_name }}" \
           -f Dockerfile \
           .
       environment:

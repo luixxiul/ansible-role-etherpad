@@ -12,7 +12,6 @@ etherpad_identifier: etherpad
 etherpad_base_path: "/{{ etherpad_identifier }}"
 etherpad_config_path: "{{ etherpad_base_path }}/config"
 etherpad_data_path: "{{ etherpad_base_path }}/data"
-etherpad_container_src_path: "{{ etherpad_base_path }}/container-src"
 
 # renovate: datasource=docker depName=etherpad/etherpad versioning=semver
 etherpad_version: 2.3.0
@@ -39,8 +38,10 @@ etherpad_container_image_registry_prefix_upstream_default: docker.io/
 etherpad_container_image_force_pull: "{{ etherpad_container_image.endswith(':latest') }}"
 
 etherpad_container_image_self_build: false
-etherpad_container_image_self_build_repo: "https://github.com/ether/etherpad-lite"
-etherpad_container_image_self_build_repo_version: "{{ etherpad_version }}"
+etherpad_container_image_self_build_name: "etherpad/etherpad:{{ etherpad_container_image_self_build_repo_version }}"
+etherpad_container_image_self_build_repo: "https://github.com/ether/etherpad-lite.git"
+etherpad_container_image_self_build_repo_version: "{{ etherpad_version if etherpad_version != 'latest' else 'main' }}"
+etherpad_container_image_self_build_src_files_path: "{{ etherpad_base_path }}/docker-src"
 
 # Controls whether the container exposes its HTTP port (tcp/9001 in the container).
 #
