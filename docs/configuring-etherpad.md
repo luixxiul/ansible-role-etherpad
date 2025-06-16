@@ -128,7 +128,7 @@ etherpad_default_pad_text: |
 
 You can also define plugins that should be installed with the variable `etherpad_plugins`. Defining plugins also requires self-building the Etherpad Docker image with the `etherpad_container_image_self_build` variable.
 
-Etherpad plugins can also be managed from the admin page (if enabled). You can view a list of all Etherpad plugins [on this page](https://static.etherpad.org/index.html).
+Etherpad plugins can also be managed from the admin page (if enabled). You can view a list of the plugins [on this page](https://static.etherpad.org/index.html).
 
 To specify plugins to install, add the following configuration to your `vars.yml` file (adapt to your needs). No plugins are installed by default.
 
